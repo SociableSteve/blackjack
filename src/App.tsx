@@ -5,8 +5,8 @@ import PlayerComponent from "./Player";
 import Dealer from "./Dealer";
 
 const MAX_PLAYERS = 4;
-const WAIT_TIMER = 5;
-const GAME_END_TIMER = 5;
+const WAIT_TIMER = 30;
+const GAME_END_TIMER = 10;
 
 interface Action {
   type: "deal" | "hit" | "stand" | "timer";
