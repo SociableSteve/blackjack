@@ -12,6 +12,7 @@ interface Action {
   type: "deal" | "hit" | "stand" | "timer";
   player?: string;
   id: string;
+  avatar?: string;
 }
 
 export interface Card {
@@ -103,8 +104,7 @@ const gameReducer = (game: Game, action: Action): Game => {
         status: "play",
         score: [0],
         timer: WAIT_TIMER,
-        avatar:
-          "https://static-cdn.jtvnw.net/jtv_user_pictures/6f2be457-e8f7-4b37-a7d5-9c9f88357e61-profile_image-150x150.png",
+        avatar: action.avatar!,
       };
       newPlayer.score = calculateScore(newPlayer.cards);
       newGame.players.push(newPlayer);
@@ -187,9 +187,13 @@ const gameReducer = (game: Game, action: Action): Game => {
               }
             });
         }
-      } else if (newGame.gameTimer.time > 0) {
+      } else if (
+        newGame.gameTimer.time > 0 &&
+        newGame.dealer.status === "stand"
+      ) {
+        console.log("here");
         newGame.gameTimer.time--;
-      } else {
+      } else if (newGame.dealer.status === "stand") {
         document.location.reload();
       }
       break;
@@ -211,11 +215,26 @@ function App() {
       "message",
       async (_channel: string, userstate: ChatUserstate, message: string) => {
         if (message.startsWith("!deal")) {
-          dispatch({
-            type: "deal",
-            player: userstate["display-name"]!,
-            id: userstate.id!,
-          });
+          fetch(
+            `https://twitch-profile-image.herokuapp.com/${userstate["display-name"]}`
+          )
+            .then((r) => {
+              return r.text();
+            })
+            .then((profile_url) => {
+              console.log({
+                type: "deal",
+                player: userstate["display-name"]!,
+                id: userstate.id!,
+                avatar: profile_url,
+              });
+              dispatch({
+                type: "deal",
+                player: userstate["display-name"]!,
+                id: userstate.id!,
+                avatar: profile_url,
+              });
+            });
         } else if (message.startsWith("!hit")) {
           dispatch({
             type: "hit",
