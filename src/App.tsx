@@ -91,6 +91,9 @@ const gameReducer = (game: Game, action: Action): Game => {
       if (player !== -1) {
         return game; // Player is already in the game
       }
+      if (newGame.dealer.status !== "waiting") {
+      	return game; // Dealer is already playing
+      }
 
       if (!newGame.dealer.cards.length) {
         newGame = { ...defaultGame };
