@@ -4,7 +4,7 @@ import { Client, ChatUserstate } from "tmi.js";
 import PlayerComponent from "./Player";
 import Dealer from "./Dealer";
 
-const MAX_PLAYERS = 4;
+const MAX_PLAYERS = 5;
 const WAIT_TIMER = 30;
 const GAME_END_TIMER = 10;
 
