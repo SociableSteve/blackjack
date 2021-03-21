@@ -217,6 +217,7 @@ function App() {
     client.on(
       "message",
       async (_channel: string, userstate: ChatUserstate, message: string) => {
+	message = message.toLowerCase();
         if (message.startsWith("!deal")) {
           fetch(
             `https://twitch-profile-image.herokuapp.com/${userstate["display-name"]}`
